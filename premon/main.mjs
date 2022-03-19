@@ -1,13 +1,34 @@
 const data = `
-/render:#container
 /h1//id:anand/
-    /div/id:btn
+    /h2
+        hello world
+    //h2
+//h1
 `;
+
 const space = 4;
 
 console.log("premon started");
 
-const lines = data.split(`\n`);
-const sp = (times = 1) => " ".repeat(space * times);
+let a1 = "/h1";
+let a2 = "  hi";
+let a3 = "//h1";
 
-const prexer = (prex) => {};
+function recur(a, b) {
+  b++;
+  console.log(a, b);
+  if (a > b) recur(a, b);
+}
+
+function recurObj(a1, b1, c1) {
+  const data = {};
+
+  if (b1.startsWith("//")) data.action = "close";
+  else if (b1.startsWith("/")) data.action = "open";
+  else if (b1.trim().startsWith('/')) data.action='swallow-prex';
+  else data.action='swallow-text'
+
+  console.log(data);
+}
+
+recurObj(a1, a2, a3);
