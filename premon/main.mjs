@@ -20,15 +20,42 @@ function recur(a, b) {
   if (a > b) recur(a, b);
 }
 
-function recurObj(a1, b1, c1) {
-  const data = {};
+const preArray = [];
+const pres = data.split("\n");
 
-  if (b1.startsWith("//")) data.action = "close";
-  else if (b1.startsWith("/")) data.action = "open";
-  else if (b1.trim().startsWith('/')) data.action='swallow-prex';
-  else data.action='swallow-text'
+// console.log(pres);
+const stack = [{ children: [], tag: "global" }];
 
-  console.log(data);
+function recurObj(list, subIndex) {
+  const data = { children: [] };
+  console.log("stack", JSON.stringify(stack));
+  if (list.startsWith("//")) {
+    data.action = "close";
+    data.tag = list.split("/")[2].trim();
+    stack.pop();
+    console.log("++++++close+++++");
+    return "close";
+  } else if (list.startsWith("/")) {
+    data.action = "open";
+    data.tag = list.split("/")[1].trim();
+    stack.push(data);
+  } else if (list.trim().startsWith("/")) {
+    let subData = {};
+    data.action = "swallow-prex";
+
+    for (let j = subIndex + 1; j < pres.length; j++) {
+      let val = recurObj(pres[j], j);
+      j = val;
+    }
+    // subData.action='open'
+    // stack.at(-1).children.push(subData)
+  } else {
+    data.action = "swallow-text";
+  }
+  // console.log(data);
+  console.log("-----------------------------------------------------");
 }
 
-recurObj(a1, a2, a3);
+for (let i = 0; i < pres.length; i++) {
+  recurObj(pres[i], i);
+}
