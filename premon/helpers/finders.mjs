@@ -18,3 +18,7 @@ export function parentFinder(el, index, storage) {
     }
   }
 }
+
+export const closingTypeFinder = (line) => {
+  return line.trim().endsWith("/") ? "self" : "native";
+};
