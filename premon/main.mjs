@@ -1,61 +1,46 @@
-const data = `
-/h1//id:anand/
-    /h2
-        hello world
-    //h2
-//h1
+const code = `
+if a==10:
+  if b==20:
+    return "hi"
 `;
 
-const space = 4;
+const lineArray = code.split("\n").filter((a) => a !== "");
+const spaceCounter = (data) => data.search(/\S|$/);
 
-console.log("premon started");
-
-let a1 = "/h1";
-let a2 = "  hi";
-let a3 = "//h1";
-
-function recur(a, b) {
-  b++;
-  console.log(a, b);
-  if (a > b) recur(a, b);
-}
-
-const preArray = [];
-const pres = data.split("\n");
-
-// console.log(pres);
-const stack = [{ children: [], tag: "global" }];
-
-function recurObj(list, subIndex) {
-  const data = { children: [] };
-  console.log("stack", JSON.stringify(stack));
-  if (list.startsWith("//")) {
-    data.action = "close";
-    data.tag = list.split("/")[2].trim();
-    stack.pop();
-    console.log("++++++close+++++");
-    return "close";
-  } else if (list.startsWith("/")) {
-    data.action = "open";
-    data.tag = list.split("/")[1].trim();
-    stack.push(data);
-  } else if (list.trim().startsWith("/")) {
-    let subData = {};
-    data.action = "swallow-prex";
-
-    for (let j = subIndex + 1; j < pres.length; j++) {
-      let val = recurObj(pres[j], j);
-      j = val;
+function parentFinder(el, index) {
+  let prevEl = bucket[index - 1];
+  if (bucket.length !== 0) {
+    if (el.depth == 0) {
+      return "global";
+    } else {
+      let b;
+      let p1 = bucket.slice(0, index).reverse();
+      for (let j of p1) {
+        if (j.depth < el.depth) {
+          return j;
+        }
+      }
     }
-    // subData.action='open'
-    // stack.at(-1).children.push(subData)
-  } else {
-    data.action = "swallow-text";
   }
-  // console.log(data);
-  console.log("-----------------------------------------------------");
+}
+const bucket = [];
+
+function elementMaker(line, index) {
+  let el = {
+    val: line.trim(),
+    children: [],
+    depth: spaceCounter(line),
+    index,
+    parent: "",
+  };
+
+ el.parent=parentFinder(el, index) || 'global';
+
+  console.log(el);
+  bucket.push(el);
 }
 
-for (let i = 0; i < pres.length; i++) {
-  recurObj(pres[i], i);
+for (let i = 0; i < lineArray.length; i++) {
+  const line = lineArray[i];
+  elementMaker(line, i);
 }
