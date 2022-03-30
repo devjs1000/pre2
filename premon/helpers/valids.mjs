@@ -1,5 +1,5 @@
 const valid = {
-  attributesExtraction: ['prex'],
+  attributesExtraction: ["prex"],
   allowedAttributes: [
     "id",
     "class",
@@ -12,6 +12,7 @@ const valid = {
     "onkeydown",
     "onkeypress",
   ],
+  closingType: ["prex"],
 };
 
 export const validExecution = (validVar, include, executionFunction) => {

@@ -16,11 +16,14 @@ export function objectify(line, index, bucket) {
     key: "key-" + index,
     parent: "",
     type: typeFinder(line),
-    closingType:closingTypeFinder(line)
   };
 
+  validExecution("closingType", el.type, ()=>{
+    el.closingType=closingTypeFinder(line)
+  })
+
   validExecution("attributesExtraction", el.type, () => {
-    el = { ...el, attributes: [attributeExtractor(line)] };
+    el = { ...el, attributes: attributeExtractor(line) };
   });
 
   let parent = parentFinder(el, index, bucket);

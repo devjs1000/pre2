@@ -1,20 +1,20 @@
-const selfFrame = (prexObj) => {
-  return `<${prexObj.value} />`;
+export const selfFrame = (name, attrs) => {
+  return `<${name} ${attrs} />`;
 };
 
-const nativeFrame = (prexObj) => {
-  return `<${prexObj.value}> ${prexObj.value} </${prexObj.value}>`;
+export const nativeFrame = (name, inner, attrs) => {
+  return `<${name} ${attrs} > ${inner} </${name}>`;
 };
 
-const attrFrame = (key, val) => {
-  return `${key} = ${val}`;
+export const attrFrame = (key, val) => {
+  return `${key} = "${val}"`;
 };
 
-const attrsFrame = (attributes) => {
+export const attrsFrame = (attributes) => {
   const attrBucket=[]
   for (const key in attributes) {
     if (Object.hasOwnProperty.call(attributes, key)) {
-      const value = atr[key];
+      const value = attributes[key];
       attrBucket.push(attrFrame(key, value))
     }
   }
